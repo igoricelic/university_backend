@@ -5,6 +5,7 @@ import com.get.appbackend.domain.Subject;
 import com.get.appbackend.domain.dto.ProffesorResponseDto;
 import com.get.appbackend.domain.dto.SubjectRequestDto;
 import com.get.appbackend.domain.dto.SubjectResponseDto;
+import com.get.appbackend.exceptions.ResourceNotFoundException;
 import com.get.appbackend.service.SubjectService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectResponseDto findById(Long id) {
         if(!subjectDao.existsById(id)) {
-            // TODO: please, handle me
+            throw new ResourceNotFoundException("Subject with id: "+id+" not found!");
         }
         Subject subject = subjectDao.getOne(id);
         SubjectResponseDto subjectResponseDto = new SubjectResponseDto(subject);
@@ -52,7 +53,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectResponseDto update(SubjectRequestDto subjectRequestDto) {
         if(!subjectDao.existsById(subjectRequestDto.getId())) {
-            // TODO: please, handle me
+            throw new ResourceNotFoundException("Subject with id: "+subjectRequestDto.getId()+" not found!");
         }
         Subject subject = subjectDao.getOne(subjectRequestDto.getId());
         subject.setName(subjectRequestDto.getName());

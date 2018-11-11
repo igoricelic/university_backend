@@ -7,6 +7,7 @@ import com.get.appbackend.domain.Subject;
 import com.get.appbackend.domain.dto.ProffesorRequestDto;
 import com.get.appbackend.domain.dto.ProffesorResponseDto;
 import com.get.appbackend.domain.dto.SubjectResponseDto;
+import com.get.appbackend.exceptions.ResourceNotFoundException;
 import com.get.appbackend.service.ProffesorService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ProffesorServiceImpl implements ProffesorService {
     @Override
     public ProffesorResponseDto findById(Long id) {
         if(!proffesorDao.existsById(id)) {
-            // TODO: Please, handle me
+            throw new ResourceNotFoundException("Proffesor with id: "+id+" not found!");
         }
         Proffesor proffesor = proffesorDao.getOne(id);
         ProffesorResponseDto proffesorResponseDto = new ProffesorResponseDto(proffesor);
@@ -65,7 +66,7 @@ public class ProffesorServiceImpl implements ProffesorService {
     @Override
     public ProffesorResponseDto update(ProffesorRequestDto proffesorRequestDto) {
         if(!proffesorDao.existsById(proffesorRequestDto.getId())) {
-            // TODO: Please, handle me
+            throw new ResourceNotFoundException("Proffesor with id: "+proffesorRequestDto.getId()+" not found!");
         }
         Proffesor proffesor = proffesorDao.getOne(proffesorRequestDto.getId());
         proffesor.setFirstName(proffesorRequestDto.getFirstName());

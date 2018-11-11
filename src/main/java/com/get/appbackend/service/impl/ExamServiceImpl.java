@@ -5,6 +5,8 @@ import com.get.appbackend.domain.*;
 import com.get.appbackend.domain.dto.ExamRequestDto;
 import com.get.appbackend.domain.dto.ExamResponseDto;
 import com.get.appbackend.domain.dto.StudentResponseDto;
+import com.get.appbackend.exceptions.BadRequestException;
+import com.get.appbackend.exceptions.ResourceNotFoundException;
 import com.get.appbackend.service.ExamService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public ExamResponseDto findById(Long id) {
         if(!examDao.existsById(id)) {
-            // exception
+            throw new ResourceNotFoundException("Exam with id "+id+" not found!");
         }
         Exam exam = examDao.getOne(id);
         ExamResponseDto examResponseDto = new ExamResponseDto(exam);
@@ -57,7 +59,7 @@ public class ExamServiceImpl implements ExamService {
     public ExamResponseDto save(ExamRequestDto examRequestDto) {
         if(!studentDao.existsById(examRequestDto.getStudentId()) || !schoolYearDao.existsById(examRequestDto.getSchoolYearId()) ||
                 !subjectDao.existsById(examRequestDto.getSubjectId()) || !proffesorDao.existsById(examRequestDto.getProffesorId())) {
-            // TODO: Exception
+            throw new ResourceNotFoundException("Resource not found!");
         }
         Student student = studentDao.getOne(examRequestDto.getStudentId());
         Subject subject = subjectDao.getOne(examRequestDto.getSubjectId());
@@ -65,11 +67,11 @@ public class ExamServiceImpl implements ExamService {
         SchoolYear schoolYear = schoolYearDao.getOne(examRequestDto.getSchoolYearId());
 
         if(!proffesor.getSubjects().contains(subject)) {
-            // TODO: Exception
+            throw new BadRequestException("Proffesor "+proffesor.getLastName()+" not contains subject "+subject.getName()+"!");
         }
 
         if(examDao.countByStudentAndSchoolYear(student, schoolYear) >= 5) {
-            // TODO: Exception
+            throw new BadRequestException("The student took the course 5 times in school year "+schoolYear.getYear()+"!");
         }
 
         Exam exam = Exam.builder().dateAndTime(new Date()).proffesor(proffesor).subject(subject)

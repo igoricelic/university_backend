@@ -17,6 +17,18 @@ public class ExceptionHandlingController {
 
     private static final String VALIDATION_ERROR_MSG = "Validation Error!";
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> resourceNotFoundException (ResourceNotFoundException ex) {
+        ExceptionResponse response = new ExceptionResponse(HttpStatus.NOT_FOUND, new Date(), ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponse> badRequestException (BadRequestException ex) {
+        ExceptionResponse response = new ExceptionResponse(HttpStatus.BAD_REQUEST, new Date(), ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> invalidRequestBody(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();

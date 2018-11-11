@@ -5,6 +5,8 @@ import com.get.appbackend.domain.Student;
 import com.get.appbackend.domain.dto.ExamResponseDto;
 import com.get.appbackend.domain.dto.StudentRequestDto;
 import com.get.appbackend.domain.dto.StudentResponseDto;
+import com.get.appbackend.exceptions.BadRequestException;
+import com.get.appbackend.exceptions.ResourceNotFoundException;
 import com.get.appbackend.service.StudentService;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponseDto findById(Long id) {
         if(!studentDao.existsById(id)) {
-           // TODO: Please, handle me
+            throw new ResourceNotFoundException("Student with id: "+id+" not found!");
         }
         Student student = studentDao.getOne(id);
         StudentResponseDto studentResponseDto = new StudentResponseDto(student);
@@ -43,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponseDto save(StudentRequestDto studentRequestDto) {
         if(studentDao.existsByIndex(studentRequestDto.getIndex())) {
-            // TODO: Please, handle me
+            throw new BadRequestException("Student with index: "+studentRequestDto.getIndex()+" already exist!");
         }
         Student student = Student.builder()
                 .firstName(studentRequestDto.getFirstName())
@@ -56,12 +58,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponseDto update(StudentRequestDto studentRequestDto) {
         if(!studentDao.existsById(studentRequestDto.getId())) {
-            // TODO: Please, handle me
+            throw new ResourceNotFoundException("Student with id: "+studentRequestDto.getId()+" not found!");
         }
         Student student = studentDao.getOne(studentRequestDto.getId());
         if(!student.getIndex().equals(studentRequestDto.getIndex())) {
             if(studentDao.existsByIndex(studentRequestDto.getIndex())) {
-                // TODO: Please, handle me
+                throw new BadRequestException("Student with index: "+studentRequestDto.getIndex()+" already exist!");
             }
         }
         student.setFirstName(studentRequestDto.getFirstName());
