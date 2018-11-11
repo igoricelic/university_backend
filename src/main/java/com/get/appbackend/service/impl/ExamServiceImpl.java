@@ -6,6 +6,7 @@ import com.get.appbackend.domain.dto.ExamRequestDto;
 import com.get.appbackend.domain.dto.ExamResponseDto;
 import com.get.appbackend.domain.dto.StudentResponseDto;
 import com.get.appbackend.service.ExamService;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,8 +36,8 @@ public class ExamServiceImpl implements ExamService {
     private SchoolYearDao schoolYearDao;
 
     @Override
-    public Page<ExamResponseDto> findAll(Pageable pageable) {
-        Page<Exam> page = examDao.findAll(pageable);
+    public Page<ExamResponseDto> findAll(Predicate predicate, Pageable pageable) {
+        Page<Exam> page = examDao.findAll(predicate, pageable);
         List<ExamResponseDto> result = page.stream().map(exam -> new ExamResponseDto(exam)).collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, page.getTotalElements());
