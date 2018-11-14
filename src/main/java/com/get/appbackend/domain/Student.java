@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "student")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @EqualsAndHashCode
 public class Student {
 
     @Id
@@ -27,22 +27,5 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<Exam> exams = new ArrayList<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Student student = (Student) o;
-        return Objects.equals(id, student.id) &&
-                Objects.equals(firstName, student.firstName) &&
-                Objects.equals(lastName, student.lastName) &&
-                Objects.equals(index, student.index) &&
-                Objects.equals(exams, student.exams);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, index, exams);
-    }
 
 }

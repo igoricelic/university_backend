@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "proffesor")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @EqualsAndHashCode
 public class Proffesor {
 
     @Id

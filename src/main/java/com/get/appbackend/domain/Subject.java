@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "subject")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @EqualsAndHashCode
 public class Subject {
 
     @Id
@@ -29,22 +29,5 @@ public class Subject {
             inverseJoinColumns = @JoinColumn(name = "proffesor_id")
     )
     private List<Proffesor> proffesors;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Subject subject = (Subject) o;
-        return Objects.equals(id, subject.id) &&
-                Objects.equals(name, subject.name) &&
-                Objects.equals(description, subject.description) &&
-                Objects.equals(exams, subject.exams) &&
-                Objects.equals(proffesors, subject.proffesors);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, exams, proffesors);
-    }
 
 }

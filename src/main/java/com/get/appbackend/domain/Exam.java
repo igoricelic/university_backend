@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "exam")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @EqualsAndHashCode
 public class Exam {
 
     @Id
